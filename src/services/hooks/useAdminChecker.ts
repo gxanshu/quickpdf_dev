@@ -11,11 +11,8 @@ export const useAdminChecker = (): [Accessor<boolean>] => {
   createEffect(() => {
     // Get the user data from localStorage
     const user = JSON.parse(localStorage.getItem('user') as string)
-
-    // Check if the user is an admin and update the state accordingly
-    if (user?.admin === true) {
-      setIsAdmin(true)
-    }
+    console.log(user)
+    console.log("the value of user is ", isAdmin())
   })
 
   return [isAdmin]
