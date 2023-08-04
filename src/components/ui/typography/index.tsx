@@ -1,10 +1,13 @@
-import { splitProps, children } from 'solid-js';
+import { splitProps, children, type Component } from 'solid-js';
 
 /**
  * @param class as class names
  * @return paragrah element
  **/
-export function Text(props: any) {
+  export const Text: Component<{
+    class: string
+    children: any
+  }> = (props) => {
   const [local, others] = splitProps(props, ['class']);
   const child = children(() => props.children);
 
@@ -19,7 +22,10 @@ export function Text(props: any) {
  * @param class as class names
  * @return span as heading
  **/
-export function Heading(props: any) {
+export const Heading: Component<{
+    class: string
+    children: any
+  }> = (props) => {
   const [local, others] = splitProps(props, ['class']);
   const child = children(() => props.children);
 

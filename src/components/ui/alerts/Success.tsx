@@ -1,16 +1,14 @@
-import { splitProps } from 'solid-js';
-
-type Props = {
-  title: string;
-  message: string;
-};
+import { splitProps, type Component } from 'solid-js';
 
 /**
  * @param title: alert title
  * @param message: alert message
  * @returns alert box
  */
-export function SuccessAlert(props: Props) {
+export const SuccessAlert: Component<{
+  title: string
+  message: string
+}> = (props) => {
   const [local] = splitProps(props, ['title', 'message']);
 
   return (

@@ -24,7 +24,6 @@ export default function Login(props: Props) {
               class='w-full px-4 py-2 mt-2'
               type='email'
               placeholder='Email Address'
-              aria-label='Email Address'
             />
           </div>
 
@@ -33,7 +32,6 @@ export default function Login(props: Props) {
               class='w-full px-4 py-2 mt-2'
               type='password'
               placeholder='Password'
-              aria-label='Password'
             />
           </div>
           <PrimaryButton class='w-full mt-4'>Login</PrimaryButton>

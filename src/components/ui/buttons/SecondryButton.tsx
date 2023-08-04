@@ -1,18 +1,16 @@
-import { children, splitProps, Show } from 'solid-js';
-import { DOMElement, JSX } from 'solid-js/jsx-runtime';
-
-type Props = {
-  class?: string;
-  icon?: DOMElement;
-  children?: JSX.Element;
-};
+import { children, splitProps, Show, type Component } from 'solid-js';
+import { JSX } from 'solid-js/jsx-runtime';
 
 /**
  * @param class: if you want to give class
  * @param icon: code for icon svg, etc
  * @returns Secondry button
  */
-export function SecondryButton(props: Props) {
+export const SecondryButton: Component<{
+  class?: string;
+  icon?: JSX.Element;
+  children?: JSX.Element;
+}> = (props) => {
   const [local, others] = splitProps(props, ['class', 'icon']);
   const childs = children(() => props.children);
 

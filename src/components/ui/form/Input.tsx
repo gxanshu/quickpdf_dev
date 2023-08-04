@@ -1,10 +1,14 @@
-import { splitProps } from 'solid-js';
+import { splitProps, type Component } from 'solid-js';
 
 /**
  * @param class: if you want to give class
  * @returns input box with some designed classes
  */
-export function Input(props: any) {
+export const Input: Component<{
+  class: string
+  type: string
+  placeholder: string
+}> = (props) => {
   const [local, others] = splitProps(props, ['class']);
 
   return (
