@@ -12,7 +12,7 @@ function App() {
   }
 
   return (
-    <Show when={isLogin()} fallback={<LoginPage />}>
+    <Show when={isLogin()} fallback={<LoginPage loginHook={setIsLogin} />}>
       <p>Loged in</p>
     </Show>
   );

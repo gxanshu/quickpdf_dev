@@ -1,6 +1,13 @@
 import { Input, PrimaryButton, Text, Heading } from '@components/ui';
+import { Setter, splitProps } from 'solid-js';
 
-export default function Login() {
+type Props = {
+  loginHook: Setter<boolean>
+}
+
+export default function Login(props: Props) {
+  const [local] = splitProps(props, ["loginHook"])
+
   return (
     <div class='w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 my-20'>
       <div class='px-6 py-4'>
