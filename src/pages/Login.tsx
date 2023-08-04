@@ -1,12 +1,19 @@
 import { Input, PrimaryButton, Text, Heading } from '@components/ui';
-import { Setter, splitProps } from 'solid-js';
+import { Setter, splitProps, type Component } from 'solid-js';
+import {auth, fireStore} from "@services/firebase"
+import {} from ""
 
-type Props = {
+
+const Login: Component<{
   loginHook: Setter<boolean>
-}
-
-export default function Login(props: Props) {
+}> = (props) => {
   const [local] = splitProps(props, ["loginHook"])
+  let emailInputBox: HTMLInputElement, passwordInputBox: HTMLInputElement;
+
+  const handleSubmit = () => {
+    if (!emailInputBox.value.trim() || !passwordInputBox.value.trim()) return;
+
+  }
 
   return (
     <div class='w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 my-20'>
@@ -24,6 +31,7 @@ export default function Login(props: Props) {
               class='w-full px-4 py-2 mt-2'
               type='email'
               placeholder='Email Address'
+              ref={emailInputBox}
             />
           </div>
 
@@ -32,6 +40,7 @@ export default function Login(props: Props) {
               class='w-full px-4 py-2 mt-2'
               type='password'
               placeholder='Password'
+              ref={passwordInputBox}
             />
           </div>
           <PrimaryButton class='w-full mt-4'>Login</PrimaryButton>
@@ -40,3 +49,5 @@ export default function Login(props: Props) {
     </div>
   );
 }
+
+export default Login
