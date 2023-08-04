@@ -10,6 +10,7 @@ export const PrimaryButton: Component<{
   class?: string;
   icon?: JSX.Element;
   children?: JSX.Element;
+  onClick?: () => void
 }> = (props) => {
   const [local, others] = splitProps(props, ['class', 'icon']);
   const childs = children(() => props.children);

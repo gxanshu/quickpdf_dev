@@ -1,18 +1,53 @@
 import { Input, PrimaryButton, Text, Heading } from '@components/ui';
 import { Setter, splitProps, type Component } from 'solid-js';
 import {auth, fireStore} from "@services/firebase"
-import {} from ""
-
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { doc, getDoc } from 'firebase/firestore'
+import toast from 'solid-toast';
 
 const Login: Component<{
   loginHook: Setter<boolean>
 }> = (props) => {
   const [local] = splitProps(props, ["loginHook"])
-  let emailInputBox: HTMLInputElement, passwordInputBox: HTMLInputElement;
+  let emailInputBox: HTMLInputElement | undefined, passwordInputBox: HTMLInputElement | undefined;
 
-  const handleSubmit = () => {
-    if (!emailInputBox.value.trim() || !passwordInputBox.value.trim()) return;
+  const handleSubmit = async() => {
+    console.log("working")
+    if (!emailInputBox?.value.trim() || !passwordInputBox?.value.trim()) return;
 
+    let emailValue = emailInputBox?.value;
+    let passwordValue = passwordInputBox?.value;
+    const toastId = toast.loading("loging");
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue)
+      const user = userCredential.user
+      console.log(user)
+
+      const docRef = doc(fireStore, 'users', user.uid)
+      const docSnap = await getDoc(docRef)
+
+      window.localStorage.setItem(
+        'user',
+        JSON.stringify({
+          login: true,
+          admin: docSnap.data()?.isAdmin ? true : false,
+          papers: docSnap.data()?.papers
+        })
+      )
+
+      local.loginHook(true) // hook to reload App.tsx
+      toast.success(`Welcome ${userCredential.user.displayName}`, {
+        id: toastId,
+      });
+
+      } catch (error: any) {
+      const errorMessage = error.message
+      console.log('errorMsg', errorMessage)
+      toast.error(errorMessage, {
+        id: toastId,
+      });
+    }
   }
 
   return (
@@ -43,7 +78,7 @@ const Login: Component<{
               ref={passwordInputBox}
             />
           </div>
-          <PrimaryButton class='w-full mt-4'>Login</PrimaryButton>
+          <PrimaryButton class='w-full mt-4' onClick={handleSubmit}>Login</PrimaryButton>
         </div>
       </div>
     </div>

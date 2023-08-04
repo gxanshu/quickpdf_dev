@@ -1,4 +1,4 @@
-import { createSignal, createEffect, Accessor } from 'solid-js';
+import { createSignal, Accessor } from 'solid-js';
 
 /**
  * Custom hook to check if the user is an admin.
