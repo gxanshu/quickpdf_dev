@@ -1,21 +1,18 @@
-import LoginPage from "@pages/Login"
-import { Show, createSignal } from "solid-js";
+import LoginPage from '@pages/Login';
+import { Show, createSignal } from 'solid-js';
 
 function App() {
   const [isLogin, setIsLogin] = createSignal<boolean>(false);
 
   // user is only created if there any login in login page
-  const userFromLocalStorage = localStorage.getItem("user")
+  const userFromLocalStorage = localStorage.getItem('user');
 
   if (userFromLocalStorage !== null) {
-    setIsLogin(true)
+    setIsLogin(true);
   }
 
   return (
-    <Show
-      when={isLogin()}
-      fallback={<LoginPage/>}
-    >
+    <Show when={isLogin()} fallback={<LoginPage />}>
       <p>Loged in</p>
     </Show>
   );

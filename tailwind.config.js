@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  darkMode: 'class',
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        qblack: '#010203',
+        qblue: '#4169e1'
+      }
+    }
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    themes: ["corporate"]
-  }
-}
-
+  plugins: []
+};
