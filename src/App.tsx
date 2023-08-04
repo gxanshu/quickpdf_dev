@@ -1,5 +1,6 @@
 import LoginPage from '@pages/Login';
 import { Show, createSignal } from 'solid-js';
+import { Toaster } from 'solid-toast';
 
 function App() {
   const [isLogin, setIsLogin] = createSignal<boolean>(false);
@@ -12,9 +13,12 @@ function App() {
   }
 
   return (
+    <>
     <Show when={isLogin()} fallback={<LoginPage loginHook={setIsLogin} />}>
       <p>Loged in</p>
     </Show>
+    <Toaster position='bottom-right'/>
+    </>
   );
 }
 
