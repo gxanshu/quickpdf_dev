@@ -7,6 +7,15 @@ module.exports = {
       colors: {
         qblack: '#010203',
         qblue: '#4169e1'
+      },
+      width: {
+        sizes: {
+          xs: '540rem',
+          sm: '720rem',
+          md: '960rem',
+          lg: '1140rem',
+          xl: '1320rem',
+        }
       }
     }
   },

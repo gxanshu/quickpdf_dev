@@ -1,4 +1,6 @@
-import { JSX, type Component, mergeProps } from "solid-js"
+import { JSX, type Component, mergeProps, children } from "solid-js"
+import { Container } from "@components/ui"
+import Header from "./Header"
 
 type LayoutProps = {
   /**
@@ -18,19 +20,17 @@ type LayoutProps = {
 /**
  * Layout component that wraps the content with a header and container.
  * @param {LayoutProps} props - The props for the Layout component.
- * @returns {JSX.Element} The Layout component.
  */
-const Layout: Component<LayoutProps> = (props) => {
-	const merged = mergeProps({isBack: false, size: ""})
+const Layout: Component<LayoutProps> = (props: LayoutProps) => {
+	const merged = mergeProps({isBack: false, size: "w-xl", props})
+  const child = children(() => props.children)
 	return (
-		<AnimationPage>
       <>
         {/* Header component with navigation options */}
-        <Header isBack={local.isBack} dark={dark} toggleColorScheme={toggleColorScheme} />
+        <Header isBack={merged.isBack} />
         {/* Container to wrap the children */}
-        <Container size={size}>{children}</Container>
+        <Container class={merged.size}>{child()}</Container>
       </>
-    </AnimationPage>
 	)
 }
 

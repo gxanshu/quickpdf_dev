@@ -5,7 +5,7 @@ import { splitProps, children, type Component } from 'solid-js';
  * @return paragrah element
  **/
   export const Text: Component<{
-    class: string
+    class?: string
     children: any
   }> = (props) => {
   const [local, others] = splitProps(props, ['class']);
@@ -23,7 +23,7 @@ import { splitProps, children, type Component } from 'solid-js';
  * @return span as heading
  **/
 export const Heading: Component<{
-    class: string
+    class?: string
     children: any
   }> = (props) => {
   const [local, others] = splitProps(props, ['class']);
