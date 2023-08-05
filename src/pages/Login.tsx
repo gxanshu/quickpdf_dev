@@ -6,7 +6,7 @@ import { doc, getDoc } from 'firebase/firestore'
 import toast from 'solid-toast';
 
 const Login: Component<{
-  loginHook: Setter<boolean>
+  loginHook?: Setter<boolean>
 }> = (props) => {
   const [local] = splitProps(props, ["loginHook"])
   let emailInputBox: HTMLInputElement | undefined, passwordInputBox: HTMLInputElement | undefined;
