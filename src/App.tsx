@@ -15,10 +15,10 @@ function App() {
 
   return (
     <>
-    <Show when={isLogin()} fallback={<LoginPage loginHook={setIsLogin} />}>
-      <Dashboard/>
-    </Show>
-    <Toaster position='bottom-right'/>
+      <Show when={isLogin()} fallback={<LoginPage loginHook={setIsLogin} />}>
+        <Dashboard />
+      </Show>
+      <Toaster position='bottom-right' />
     </>
   );
 }

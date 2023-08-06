@@ -14,7 +14,7 @@ module.exports = {
           sm: '720rem',
           md: '960rem',
           lg: '1140rem',
-          xl: '1320rem',
+          xl: '1320rem'
         }
       }
     }

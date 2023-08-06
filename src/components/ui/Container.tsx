@@ -1,5 +1,5 @@
 import { children, splitProps, type Component } from 'solid-js';
-import {  JSX } from 'solid-js/jsx-runtime';
+import { JSX } from 'solid-js/jsx-runtime';
 
 /**
  * @param class: if you want to give class
@@ -13,11 +13,8 @@ export const Container: Component<{
   const childs = children(() => props.children);
 
   return (
-    <div
-      class={`container px-6 py-4 mx-auto ${local.class}`}
-      {...others}
-    >
+    <div class={`container mx-auto ${local.class}`} {...others}>
       {childs()}
     </div>
   );
-}
+};

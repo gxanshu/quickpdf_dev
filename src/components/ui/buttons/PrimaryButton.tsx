@@ -1,5 +1,5 @@
 import { children, splitProps, Show, type Component } from 'solid-js';
-import {  JSX } from 'solid-js/jsx-runtime';
+import { JSX } from 'solid-js/jsx-runtime';
 
 /**
  * @param class: if you want to give class
@@ -10,7 +10,7 @@ export const PrimaryButton: Component<{
   class?: string;
   icon?: JSX.Element;
   children?: JSX.Element;
-  onClick?: () => void
+  onClick?: () => void;
 }> = (props) => {
   const [local, others] = splitProps(props, ['class', 'icon']);
   const childs = children(() => props.children);
@@ -24,4 +24,4 @@ export const PrimaryButton: Component<{
       {childs()}
     </button>
   );
-}
+};

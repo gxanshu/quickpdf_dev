@@ -4,10 +4,10 @@ import { splitProps, children, type Component } from 'solid-js';
  * @param class as class names
  * @return paragrah element
  **/
-  export const Text: Component<{
-    class?: string
-    children: any
-  }> = (props) => {
+export const Text: Component<{
+  class?: string;
+  children: any;
+}> = (props) => {
   const [local, others] = splitProps(props, ['class']);
   const child = children(() => props.children);
 
@@ -16,16 +16,16 @@ import { splitProps, children, type Component } from 'solid-js';
       {child()}
     </p>
   );
-}
+};
 
 /**
  * @param class as class names
  * @return span as heading
  **/
 export const Heading: Component<{
-    class?: string
-    children: any
-  }> = (props) => {
+  class?: string;
+  children: any;
+}> = (props) => {
   const [local, others] = splitProps(props, ['class']);
   const child = children(() => props.children);
 
@@ -34,4 +34,4 @@ export const Heading: Component<{
       {child()}
     </h3>
   );
-}
+};

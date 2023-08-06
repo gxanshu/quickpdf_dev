@@ -1,31 +1,31 @@
 import { Input, PrimaryButton, Text, Heading } from '@components/ui';
 import { Setter, splitProps, type Component } from 'solid-js';
-import {auth, fireStore} from "@services/firebase"
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
+import { auth, fireStore } from '@services/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import toast from 'solid-toast';
 
 const Login: Component<{
-  loginHook?: Setter<boolean>
+  loginHook?: Setter<boolean>;
 }> = (props) => {
-  const [local] = splitProps(props, ["loginHook"])
+  const [local] = splitProps(props, ['loginHook']);
   let emailInputBox: HTMLInputElement | undefined, passwordInputBox: HTMLInputElement | undefined;
 
-  const handleSubmit = async() => {
-    console.log("working")
+  const handleSubmit = async () => {
+    console.log('working');
     if (!emailInputBox?.value.trim() || !passwordInputBox?.value.trim()) return;
 
     let emailValue = emailInputBox?.value;
     let passwordValue = passwordInputBox?.value;
-    const toastId = toast.loading("loging");
+    const toastId = toast.loading('loging');
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue)
-      const user = userCredential.user
-      console.log(user)
+      const userCredential = await signInWithEmailAndPassword(auth, emailValue, passwordValue);
+      const user = userCredential.user;
+      console.log(user);
 
-      const docRef = doc(fireStore, 'users', user.uid)
-      const docSnap = await getDoc(docRef)
+      const docRef = doc(fireStore, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
 
       window.localStorage.setItem(
         'user',
@@ -34,21 +34,20 @@ const Login: Component<{
           admin: docSnap.data()?.isAdmin ? true : false,
           papers: docSnap.data()?.papers
         })
-      )
+      );
 
-      local.loginHook(true) // hook to reload App.tsx
+      local.loginHook(true); // hook to reload App.tsx
       toast.success(`Welcome ${userCredential.user.displayName}`, {
-        id: toastId,
+        id: toastId
       });
-
-      } catch (error: any) {
-      const errorMessage = error.message
-      console.log('errorMsg', errorMessage)
+    } catch (error: any) {
+      const errorMessage = error.message;
+      console.log('errorMsg', errorMessage);
       toast.error(errorMessage, {
-        id: toastId,
+        id: toastId
       });
     }
-  }
+  };
 
   return (
     <div class='w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 my-20'>
@@ -78,11 +77,13 @@ const Login: Component<{
               ref={passwordInputBox}
             />
           </div>
-          <PrimaryButton class='w-full mt-4' onClick={handleSubmit}>Login</PrimaryButton>
+          <PrimaryButton class='w-full mt-4' onClick={handleSubmit}>
+            Login
+          </PrimaryButton>
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Login
+export default Login;

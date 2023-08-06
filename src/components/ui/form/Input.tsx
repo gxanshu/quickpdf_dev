@@ -5,9 +5,9 @@ import { splitProps, type Component } from 'solid-js';
  * @returns input box with some designed classes
  */
 export const Input: Component<{
-  class: string
-  type: string
-  placeholder: string
+  class: string;
+  type: string;
+  placeholder: string;
 }> = (props) => {
   const [local, others] = splitProps(props, ['class']);
 
@@ -17,4 +17,4 @@ export const Input: Component<{
       {...others}
     />
   );
-}
+};
