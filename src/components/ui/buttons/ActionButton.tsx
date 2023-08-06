@@ -7,13 +7,15 @@ const Button: Component<{
   class?: string;
   onClick?: () => void;
   children?: JSX.Element;
+  style?: string
 }> = (props) => {
-  const [local] = splitProps(props, ['class', 'onClick']);
+  const [local, other] = splitProps(props, ['class', 'onClick']);
   const child = children(() => props.children);
   return (
     <button
       class={`bg-gray-100 flex justify-center items-center w-28 drop-shadow-md rounded ${local.class}`}
       onClick={local.onClick}
+      {...other}
     >
       {child()}
     </button>
@@ -51,7 +53,8 @@ export const PdfCompanyCard: Component<{
   const navigate = useNavigate();
   return (
     <Button
-      class={`bg-[url('${local.logo}')] bg-no-repeat bg-cover bg-center h-28`}
+      class={`bg-no-repeat bg-cover bg-center h-28`}
+      style={`background-image: url(${local.logo})`}
       onClick={(): void => navigate(`/company/${local.id}`)}
     />
   );

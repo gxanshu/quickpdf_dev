@@ -1,5 +1,5 @@
 import { Component, Show, For } from 'solid-js';
-import { Input, SecondryButton, Text, SimpleGrid, AddButton } from '@components/ui';
+import { Input, SecondryButton, Text, SimpleGrid, AddButton, PdfCompanyCard } from '@components/ui';
 import { ReloadIcon } from '@components/Icons';
 import Layout from '@components/layouts';
 import { useAdminChecker } from '@services/hooks';
@@ -20,7 +20,7 @@ const Home: Component = () => {
           <AddButton url='/login' />
         </Show>
         <For each={[1, 2, 3]}>
-          {() => <AddButton url='/login' />}
+          {() => <PdfCompanyCard id={"1"} logo="https://upload.wikimedia.org/wikipedia/en/2/2c/Aaj_Tak_Logo.png"/>}
           {/* @todo add company button*/}
         </For>
       </SimpleGrid>
