@@ -7,7 +7,7 @@ const Button: Component<{
   class?: string;
   onClick?: () => void;
   children?: JSX.Element;
-  style?: string
+  style?: string;
 }> = (props) => {
   const [local, other] = splitProps(props, ['class', 'onClick']);
   const child = children(() => props.children);
@@ -48,12 +48,15 @@ export const AddButton: Component<{
 export const PdfCompanyCard: Component<{
   logo: string;
   id: string;
+  loading?: boolean;
 }> = (props) => {
-  const [local] = splitProps(props, ['logo', 'id']);
+  const [local] = splitProps(props, ['logo', 'id', 'loading']);
   const navigate = useNavigate();
   return (
     <Button
-      class={`bg-no-repeat bg-cover bg-center h-28`}
+      class={`bg-no-repeat bg-cover bg-center h-28 ${
+        local.loading ? 'animate-pulse drop-shadow-sm' : ''
+      }`}
       style={`background-image: url(${local.logo})`}
       onClick={(): void => navigate(`/company/${local.id}`)}
     />

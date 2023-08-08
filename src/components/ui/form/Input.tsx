@@ -8,6 +8,7 @@ export const Input: Component<{
   class: string;
   type: string;
   placeholder: string;
+  onInput?: (e: any) => void;
 }> = (props) => {
   const [local, others] = splitProps(props, ['class']);
 
