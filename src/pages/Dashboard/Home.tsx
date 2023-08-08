@@ -14,9 +14,9 @@ import { query, collection, getDocs } from 'firebase/firestore';
 const Home: Component = () => {
   const [isAdmin] = useAdminChecker();
   const [allCompanies, setAllCompanies] = createSignal<Company[] | undefined>(undefined);
-  const [userInput, setUserInput] = createSignal<string>('')
+  const [userInput, setUserInput] = createSignal<string>('');
 
-  let filtedCompanies = () => allCompanies()
+  let filtedCompanies = () => allCompanies();
 
   // Fetches all companies from Firebase Firestore
   const syncAllCompanies = async (): Promise<void> => {
@@ -63,9 +63,10 @@ const Home: Component = () => {
 
   getDataFromBackend();
 
-  createEffect(()=> {
-    filtedCompanies = () => allCompanies()?.filter((company) => company.name.toLowerCase().includes(userInput()))
-  })
+  createEffect(() => {
+    filtedCompanies = () =>
+      allCompanies()?.filter((company) => company.name.toLowerCase().includes(userInput()));
+  });
 
   return (
     <Layout>
