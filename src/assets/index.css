@@ -4,6 +4,6 @@
 
 @layer components {
   body {
-    @apply dark:bg-qblack;
+    @apply dark:bg-gray-950;
   }
 }

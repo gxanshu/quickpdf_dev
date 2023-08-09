@@ -5,7 +5,7 @@ import { splitProps, type Component } from 'solid-js';
  * @returns input box with some designed classes
  */
 export const Input: Component<{
-  class: string;
+  class?: string;
   type: string;
   placeholder: string;
   onInput?: (e: any) => void;

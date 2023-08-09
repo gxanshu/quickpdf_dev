@@ -79,7 +79,7 @@ const Home: Component = () => {
             class='w-full py-1 px-3'
             onInput={(e) => setUserInput(e.target.value)}
           />
-          <SecondryButton icon={<ReloadIcon />} />
+          <SecondryButton icon={<ReloadIcon />} onClick={syncAllCompanies} />
         </div>
       </div>
       <SimpleGrid class='mt-8 grid-cols-8 gap-2'>

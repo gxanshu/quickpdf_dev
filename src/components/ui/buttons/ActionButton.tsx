@@ -13,7 +13,7 @@ const Button: Component<{
   const child = children(() => props.children);
   return (
     <button
-      class={`bg-gray-100 flex justify-center items-center w-28 drop-shadow-md rounded ${local.class}`}
+      class={`bg-gray-100 dark:bg-gray-700 dark:text-white flex justify-center items-center w-28 drop-shadow-md rounded ${local.class}`}
       onClick={local.onClick}
       {...other}
     >
