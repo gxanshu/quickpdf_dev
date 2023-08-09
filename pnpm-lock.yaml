@@ -11,6 +11,9 @@ dependencies:
   '@tauri-apps/api':
     specifier: ^1.4.0
     version: 1.4.0
+  '@thisbeyond/solid-select':
+    specifier: ^0.14.0
+    version: 0.14.0(solid-js@1.7.8)
   firebase:
     specifier: ^10.1.0
     version: 10.1.0(react-native@0.72.3)
@@ -2709,6 +2712,14 @@ packages:
       '@tauri-apps/cli-win32-ia32-msvc': 1.4.0
       '@tauri-apps/cli-win32-x64-msvc': 1.4.0
     dev: true
+
+  /@thisbeyond/solid-select@0.14.0(solid-js@1.7.8):
+    resolution: {integrity: sha512-ecq4U3Vnc/nJbU84ARuPg2scNuYt994ljF5AmBlzuZW87x43mWiGJ5hEWufIJJMpDT6CcnCIx/xbrdDkaDEHQw==}
+    peerDependencies:
+      solid-js: ^1.5
+    dependencies:
+      solid-js: 1.7.8
+    dev: false
 
   /@types/babel__core@7.20.1:
     resolution: {integrity: sha512-aACu/U/omhdk15O4Nfb+fHgH/z3QsfQzpnvRZhYhThms83ZnAOZz7zZAWO7mn2yyNQaA4xTO8GLK3uqFU4bYYw==}

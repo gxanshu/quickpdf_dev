@@ -21,15 +21,15 @@ const Header: Component<{
   const handleLogout = (): void => {
     signOut(auth)
       .then(async () => {
-        localStorage.removeItem('user')
+        localStorage.removeItem('user');
         //setting company data to undefiend in local database
-        await store.set('company', 'companies', undefined)
-        location.reload()
+        await store.set('company', 'companies', undefined);
+        location.reload();
       })
       .catch((error) => {
-        console.log('An error happened.', error)
-      })
-  }
+        console.log('An error happened.', error);
+      });
+  };
 
   return (
     <nav class='relative bg-white shadow dark:bg-gray-800'>
