@@ -25,15 +25,13 @@ import toast from 'solid-toast';
 const Company: Component = () => {
   const { companyName } = useParams();
   const [localLayouts, setLocalLayouts] = createSignal<{ [key: string]: any }>({});
-  const [selectedDate, setSelectedDate] = createSignal<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = createSignal<Date | null>(null);
   const [newspapers, setNewspapers] = createSignal<PaperType[]>([
     {
       date: new Date(),
       realDate: '01-01-2023'
     }
   ]);
-
-  let filteredNewspapers = () => newspapers()
 
   // Function to get all papers from the backend
   const getAllPapers = async (): Promise<void> => {
@@ -91,6 +89,7 @@ const Company: Component = () => {
 
   const handleDateInput = (e): void => {
     let date = new Date(e.target.value);
+    console.log('the date is updating', date);
     setSelectedDate(date);
   };
 
@@ -98,8 +97,6 @@ const Company: Component = () => {
     getAllPapers();
     getAllLayout();
   });
-
-  
 
   return (
     <Layout isBack>
@@ -119,8 +116,8 @@ const Company: Component = () => {
       <div class='mt-8'>
         <Heading class='text-md'>Layout</Heading>
         <SimpleGrid class='grid-cols-8 w-full gap-8 mt-4'>
-          <AddButton url={`/new-design/${companyName}`} height='h-36' />
-          <For each={Object.keys(localLayouts)}>
+          <AddButton url={`/new-design/${companyName}`} height='h-40' />
+          <For each={Object.keys(localLayouts())}>
             {(layout) => <LayoutCard url={`/edit-layout/${companyName}/${layout}`} name={layout} />}
           </For>
         </SimpleGrid>
@@ -128,7 +125,7 @@ const Company: Component = () => {
         <Heading class='text-md mt-8'>Newspapers</Heading>
         <SimpleGrid class='grid-cols-8 w-full gap-8 mt-4'>
           <AddButton url={`/new-pdf/${companyName}`} height='h-40' />
-          <For each={filteredNewspapers()}>
+          <For each={newspapers()}>
             {(paper) => (
               <PaperCard
                 url={`/edit-pdf/${companyName}/${paper.realDate}`}

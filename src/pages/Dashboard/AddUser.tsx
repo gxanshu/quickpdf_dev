@@ -125,7 +125,7 @@ const AddUser: Component = () => {
 
   return (
     <Layout isBack>
-      <div class='container flex items-center justify-center px-6 mx-auto'>
+      <div class='flex items-center justify-center px-6 mx-auto'>
         <div class='w-full max-w-md'>
           <div class='w-full flex items-center justify-center'>
             <img
