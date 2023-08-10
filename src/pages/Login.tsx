@@ -12,7 +12,6 @@ const Login: Component<{
   let emailInputBox: HTMLInputElement | undefined, passwordInputBox: HTMLInputElement | undefined;
 
   const handleSubmit = async () => {
-    console.log('working');
     if (!emailInputBox?.value.trim() || !passwordInputBox?.value.trim()) return;
 
     let emailValue = emailInputBox?.value;

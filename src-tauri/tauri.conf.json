@@ -25,7 +25,7 @@
         "createDir": true,
         "removeFile": true,
         "exists": true,
-        "scope": ["$APPDATA/*"]
+        "scope": ["$APPDATA/*", "$APPDATA/companies/*"]
       },
       "path": {
         "all": true

@@ -1,5 +1,6 @@
 import { Company } from '@services/types';
 import { exists, BaseDirectory, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
+import { appDataDir } from '@tauri-apps/api/path';
 
 type getProps = {
   [key: string]: Company[];
@@ -18,7 +19,6 @@ export class Store {
     if (fileExists) {
       let localData = await readTextFile(fileName, { dir: BaseDirectory.AppData });
       data = JSON.parse(localData) as getProps;
-      console.log('data find from backend', data);
     }
     return data[key];
   }
@@ -30,10 +30,26 @@ export class Store {
    * @return {void}
    **/
   async set(storeName: string, key: string, value: any): Promise<void> {
-    console.log('credentials', storeName, key, value);
     const data: getProps = {};
     data[key] = value;
     console.log('log from store', data);
     await writeTextFile(`${storeName}.json`, JSON.stringify(data), { dir: BaseDirectory.AppData });
+  }
+
+  async getPDF(companyName: string): Promise<any[]> {
+    const fileName = `${companyName}.json`;
+    const appDataFolder = await appDataDir();
+    const isFileExists = await exists(`${appDataFolder}companies/${fileName}`);
+    let data = { papers: [] };
+    try {
+      if (isFileExists) {
+        let localData = await readTextFile(`${appDataFolder}companies/${fileName}`);
+        data = JSON.parse(localData);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    return data.papers;
   }
 }

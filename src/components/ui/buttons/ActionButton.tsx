@@ -77,8 +77,8 @@ export const PaperCard: Component<{
   const navigate = useNavigate();
   const [local] = splitProps(props, ['url', 'date', 'month']);
   return (
-    <Button class='h-40' onClick={(): void => navigate(local.url)}>
-      <Text class='bg-gradient-to-r from-green-400 to-blue-500 text-xl text-center'>
+    <Button class='h-40 flex-col' onClick={(): void => navigate(local.url)}>
+      <Text class='text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 text-xl text-center'>
         {local.date}
       </Text>
       <Text>{local.month}</Text>

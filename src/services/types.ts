@@ -7,3 +7,8 @@ export type Company = {
   type: string;
   address: string;
 };
+
+export type PaperType = {
+  date: Date;
+  realDate: string;
+};

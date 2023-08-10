@@ -1,118 +1,138 @@
 import Layout from '@components/layouts';
-import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { Heading, Input } from '@components/ui';
-import {Select} from "@thisbeyond/solid-select"
-import "@thisbeyond/solid-select/style.css"
+import { Component, createSignal, onMount } from 'solid-js';
+import { Input, PrimaryButton } from '@components/ui';
+// @ts-ignore type deifination is not provided by the package
+import { Select } from '@thisbeyond/solid-select';
+import '@thisbeyond/solid-select/style.css';
 import { query, collection, getDocs, setDoc, updateDoc, doc, arrayUnion } from 'firebase/firestore';
-import { fireStore, storage } from '@services/firebase';
+import { fireStore, storage, auth } from '@services/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { uploadString } from 'firebase/storage';
+import { uploadString, ref } from 'firebase/storage';
+import toast from 'solid-toast';
+import { getHttpImage } from '@services/utils';
 
 const AddUser: Component = () => {
-  const [newspapers, setNewspapers] = createSignal(["apple", "banana", "pear", "pineapple", "kiwi"])
-  const [selectedNewspapers, setSelectedNewspapers] = createSignal([])
-  const [avatarImage, setAvatarImage] = createSignal<string>("https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100")
+  const [newspapers, setNewspapers] = createSignal<string[]>([]);
+  const [selectedNewspapers, setSelectedNewspapers] = createSignal([]);
+  const [avatarImage, setAvatarImage] = createSignal<string>(
+    'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100'
+  );
 
-   const getAllPapers = async (): Promise<void> => {
+  let nameInputBox: HTMLInputElement | undefined,
+    emailInputBox: HTMLInputElement | undefined,
+    passwordInputBox: HTMLInputElement | undefined,
+    numberInputBox: HTMLInputElement | undefined;
+
+  const getAllPapers = async (): Promise<void> => {
     try {
-      const q = query(collection(fireStore, 'papers'))
-      const querySnapshot = await getDocs(q)
-      const allPapers: string[] = []
+      const q = query(collection(fireStore, 'papers'));
+      const querySnapshot = await getDocs(q);
+      const allPapers: string[] = [];
       querySnapshot.forEach((doc) => {
-        allPapers.push(doc.id)
-      })
-      console.log(allPapers)
-      setNewspapers(allPapers)
+        allPapers.push(doc.id);
+      });
+      console.log(allPapers);
+      setNewspapers(allPapers);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const handleFileUpload = (file: File): void => {
-    setAvatarImage(URL.createObjectURL(file))
-  }
+  const handleFileUpload = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = (): void => {
+        setAvatarImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-  // const save = async (): Promise<void> => {
-  //   // saving user
-  //   notifications.show({
-  //     id: 'load-data',
-  //     loading: true,
-  //     title: 'Saving user',
-  //     message: 'Data is saving on the server please wait.',
-  //     autoClose: false,
-  //     withCloseButton: false
-  //   })
-  //   try {
-  //     // 1. registered user
-  //     const userCredential = await createUserWithEmailAndPassword(
-  //       auth,
-  //       values.emailAddress,
-  //       values.password
-  //     )
-  //     const user = userCredential.user
+  const save = async (): Promise<void> => {
+    // saving user
+    const values = {
+      name: nameInputBox?.value,
+      emailAddress: emailInputBox?.value,
+      password: passwordInputBox?.value,
+      number: numberInputBox?.value
+    };
+    if (
+      !values.name?.trim() ||
+      !values.emailAddress?.trim() ||
+      !values.password?.trim() ||
+      !values.number?.trim()
+    )
+      return;
+    const toastID = toast.loading('saving user');
+    try {
+      // 1. registered user
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.emailAddress,
+        values.password
+      );
+      const user = userCredential.user;
 
-  //     //2. uploading profile pic
-  //     const storageRef = ref(storage, `userpic/${user.uid}.jpeg`)
-  //     await uploadString(storageRef, image, 'data_url')
+      //2. uploading profile pic
+      const metaData = {
+        cacheControl: 'public,max-age=86400'
+      };
+      const storageRef = ref(storage, `userpic/${user.uid}.jpeg`);
+      await uploadString(storageRef, avatarImage(), 'data_url', metaData);
 
-  //     //2. updating name
-  //     await updateProfile(user, {
-  //       displayName: values.name,
-  //       photoURL: getHttpImage(`userpic/${user.uid}.jpeg`)
-  //     })
+      //2. updating name
+      await updateProfile(user, {
+        displayName: values.name,
+        photoURL: getHttpImage(`userpic/${user.uid}.jpeg`)
+      });
 
-  //     //3. adding in company employ list
-  //     const userRef = doc(fireStore, 'company', 'allUsers')
-  //     await updateDoc(userRef, {
-  //       users: arrayUnion({
-  //         name: user.displayName,
-  //         uid: user.uid
-  //       })
-  //     })
+      //3. adding in company employ list
+      const userRef = doc(fireStore, 'company', 'allUsers');
+      await updateDoc(userRef, {
+        users: arrayUnion({
+          name: user.displayName,
+          uid: user.uid
+        })
+      });
 
-  //     //4. giving user their company
-  //     await setDoc(doc(fireStore, `users/${user.uid}`), {
-  //       isAdmin: false,
-  //       name: values.name,
-  //       number: values.number,
-  //       papers: values.papers
-  //     })
+      //4. giving user their company
+      await setDoc(doc(fireStore, `users/${user.uid}`), {
+        isAdmin: false,
+        name: values.name,
+        number: values.number,
+        papers: selectedNewspapers()
+      });
 
-  //     //5. updating notification
-  //     notifications.update({
-  //       id: 'load-data',
-  //       color: 'teal',
-  //       title: 'Saved ' + values.name,
-  //       message: 'user is saved on the server',
-  //       icon: <IconCross size="1rem" />,
-  //       autoClose: 2000
-  //     })
-  //     navigate('/')
-  //   } catch (error: any) {
-  //     const errorCode = error.code
-  //     const errorMessage = error.message
-  //     // ..
-  //     notifications.update({
-  //       id: 'load-data',
-  //       color: 'red',
-  //       title: 'Error ' + errorCode,
-  //       message: errorMessage,
-  //       icon: <IconCross size="1rem" />,
-  //       autoClose: 2000
-  //     })
-  //   }
-  // }
+      //5. updating notification
+      toast.success('User Created Successfully', {
+        id: toastID
+      });
+    } catch (error: any) {
+      const errorMessage = error.message;
+      // ..
+      toast.error(errorMessage, {
+        id: toastID
+      });
+    }
+  };
 
-  onMount(async ()=> {
-    await getAllPapers()
-  })
+  onMount(async () => {
+    await getAllPapers();
+  });
 
   return (
-    <Layout>
+    <Layout isBack>
       <div class='container flex items-center justify-center px-6 mx-auto'>
-        <form class='w-full max-w-md'>
-          <div class="w-full flex items-center justify-center">
-            <img class="object-cover w-16 h-16 rounded-full ring ring-gray-300 dark:ring-gray-600" src={avatarImage()} alt=""/>
+        <div class='w-full max-w-md'>
+          <div class='w-full flex items-center justify-center'>
+            <img
+              class='object-cover w-16 h-16 rounded-full ring ring-gray-300 dark:ring-gray-600'
+              src={avatarImage()}
+              alt=''
+            />
           </div>
           <div class='relative flex items-center mt-8'>
             <span class='absolute'>
@@ -133,8 +153,9 @@ const AddUser: Component = () => {
             </span>
             <Input
               type='text'
-              placeholder='First Name'
+              placeholder='Full Name'
               class='block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900'
+              ref={nameInputBox}
             />
           </div>
 
@@ -159,7 +180,13 @@ const AddUser: Component = () => {
 
             <h2 class='mx-3 text-gray-400'>Profile Photo</h2>
 
-            <input id='dropzone-file' type='file' accept='image/*' class='hidden' onChange={handleFileUpload}/>
+            <input
+              id='dropzone-file'
+              type='file'
+              accept='image/*'
+              class='hidden'
+              onChange={handleFileUpload}
+            />
           </label>
 
           <div class='relative flex items-center mt-6'>
@@ -180,10 +207,37 @@ const AddUser: Component = () => {
               </svg>
             </span>
 
-            <input
+            <Input
               type='email'
-              class='block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40'
+              class='block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900'
               placeholder='Email address'
+              ref={emailInputBox}
+            />
+          </div>
+
+          <div class='relative flex items-center mt-6'>
+            <span class='absolute'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                class='w-6 h-6 mx-3 text-gray-300 dark:text-gray-500'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                stroke-width='2'
+              >
+                <path
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                  d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+                />
+              </svg>
+            </span>
+
+            <Input
+              type='tel'
+              class='block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900'
+              placeholder='Mobile Number'
+              ref={numberInputBox}
             />
           </div>
 
@@ -205,21 +259,28 @@ const AddUser: Component = () => {
               </svg>
             </span>
 
-            <input
+            <Input
               type='password'
-              class='block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40'
+              class='block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900'
               placeholder='Password'
+              ref={passwordInputBox}
             />
           </div>
 
-          <Select class="qmultiselect" multiple options={newspapers()} onChange={setSelectedNewspapers} />
+          <Select
+            class='qmultiselect'
+            multiple
+            options={newspapers()}
+            onChange={setSelectedNewspapers}
+            isOptionDisabled={(option: never) => selectedNewspapers().includes(option)}
+          />
 
           <div class='mt-6'>
-            <button class='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50'>
+            <PrimaryButton class='w-full px-6 py-3' onClick={save}>
               Sign Up
-            </button>
+            </PrimaryButton>
           </div>
-        </form>
+        </div>
       </div>
     </Layout>
   );
