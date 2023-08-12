@@ -84,7 +84,7 @@ const Home: Component = () => {
       </div>
       <SimpleGrid class='mt-8 grid-cols-8 gap-2'>
         <Show when={isAdmin()}>
-          <AddButton url='/login' />
+          <AddButton url='/company' />
         </Show>
         <Show
           when={filtedCompanies() != undefined}
